@@ -4,6 +4,6 @@ const QUIZ_CONFIG = {
   totalQuestions: 5,
   duration: 600,
   passScore: 0.7,
-  startTime: new Date("2025-12-18T08:00:00"),
-  endTime:   new Date("2025-12-20T17:00:00")
+  startTime: new Date("2025-12-01T08:00:00"),
+  endTime:   new Date("2025-12-30T17:00:00")
 };
