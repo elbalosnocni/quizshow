@@ -1,247 +1,37 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Elbalosnocni | Internal Quiz</title>
-
-<style>
-:root{
-  --primary:#0ac0ca;
-  --bg:#f4f6fb;
-  --text:#222;
-}
-
-body{
-  margin:0;
-  font-family:Inter,Arial;
-  background:var(--bg);
-  color:var(--text);
-}
-
-.container{
-  max-width:720px;
-  margin:auto;
-  padding:16px;
-}
-
-.card{
-  background:#fff;
-  border-radius:16px;
-  padding:22px;
-  box-shadow:0 10px 30px rgba(0,0,0,.08);
-}
-
-.header{
-  text-align:center;
-  margin-bottom:16px;
-}
-
-.logo{
-  font-size:28px;
-  font-weight:700;
-  color:var(--primary);
-}
-
-.progress{
-  height:8px;
-  background:#e6e9f0;
-  border-radius:6px;
-  overflow:hidden;
-  margin:12px 0;
-}
-
-#bar{
-  height:100%;
-  width:0%;
-  background:var(--primary);
-}
-
-.timer{
-  text-align:right;
-  font-weight:600;
-}
-
-.option{
-  display:flex;
-  gap:12px;
-  padding:14px;
-  border:1px solid #e1e5ee;
-  border-radius:12px;
-  cursor:pointer;
-  margin-top:12px;
-  transition:.2s;
-}
-
-.option:hover{
-  background:#f2fbfc;
-  border-color:var(--primary);
-}
-
-.option input{display:none}
-
-.radio{
-  width:18px;
-  height:18px;
-  border:2px solid #aaa;
-  border-radius:50%;
-  margin-top:3px;
-  flex-shrink:0;
-  position:relative;
-}
-
-.option input:checked + .radio{
-  border-color:var(--primary);
-}
-
-.option input:checked + .radio:after{
-  content:"";
-  width:10px;
-  height:10px;
-  background:var(--primary);
-  border-radius:50%;
-  position:absolute;
-  top:50%;left:50%;
-  transform:translate(-50%,-50%);
-}
-
-button{
-  margin-top:18px;
-  width:100%;
-  padding:12px;
-  border:0;
-  border-radius:10px;
-  background:var(--primary);
-  color:#fff;
-  font-size:16px;
-  cursor:pointer;
-}
-
-input{
-  width:100%;
-  padding:12px;
-  margin-top:12px;
-  border-radius:10px;
-  border:1px solid #ccc;
-}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Elbalosnocni Ltd. – Quiz</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
-<div class="container">
+  <header class="header">
+    <img src="assets/logo.png" class="logo">
+    <h1>Elbalosnocni Ltd.</h1>
+  </header>
 
-<!-- LOGIN -->
-<div class="card" id="login">
-  <div class="header">
-    <div class="logo">The Zhang</div>
-    <h2>Elbalosnocni – Bài thi nội bộ</h2>
+  <div class="box" id="loginBox">
+    <h2>Đăng nhập</h2>
+    <input id="empId" placeholder="Mã NV">
+    <input id="empName" placeholder="Họ và tên">
+    <input id="dept" placeholder="Phòng ban / Bộ phận">
+    <button onclick="startQuiz()">Bắt đầu</button>
+    <p id="msg"></p>
   </div>
-  <input id="name" placeholder="Họ tên">
-  <input id="code" placeholder="Mã nhân viên (số)">
-  <button onclick="start()">Bắt đầu</button>
-</div>
 
-<!-- QUIZ -->
-<div class="card" id="quiz" style="display:none">
-  <div class="timer" id="timer"></div>
-  <div class="progress"><div id="bar"></div></div>
-  <h3 id="q"></h3>
-  <div id="answers"></div>
-  <button onclick="next()">Câu tiếp</button>
-</div>
+  <div class="box hidden" id="quizBox">
+    <div class="top">
+      <span id="progress"></span>
+      <span id="timer"></span>
+    </div>
+    <h3 id="question"></h3>
+    <div id="answers"></div>
+    <button onclick="next()">Tiếp</button>
+  </div>
 
-<!-- RESULT -->
-<div class="card" id="end" style="display:none">
-  <h2>KẾT QUẢ</h2>
-  <div id="result"></div>
-</div>
-
-</div>
-
-<script>
-const TOTAL=5;
-const TIME=600;
-const PASS_RATE=0.7;
-
-// 🔗 Google Apps Script (sẽ thay ở PHẦN 2)
-const API="YOUR_SCRIPT_URL";
-
-let qs=[],i=0,score=0,time=TIME,timer;
-
-function shuffle(a){return a.sort(()=>Math.random()-0.5)}
-
-async function start(){
-  if(!name.value||!code.value) return alert("Nhập đủ thông tin");
-  if(isNaN(code.value)) return alert("Mã NV phải là số");
-
-  const res = await fetch(API+"?check="+code.value).then(r=>r.text());
-  if(res==="LOCKED") return alert("❌ Mã NV đã thi");
-
-  qs = shuffle(await fetch(API+"?q=1").then(r=>r.json()))
-        .slice(0,TOTAL)
-        .map(x=>{
-          let opts=shuffle(x.opts);
-          return {...x,opts,correct:opts.indexOf(x.correct)}
-        });
-
-  login.style.display="none";
-  quiz.style.display="block";
-  tick(); load();
-}
-
-function tick(){
-  timer=setInterval(()=>{
-    timerEl.innerText="⏱️ "+Math.floor(time/60)+":"+String(time%60).padStart(2,0);
-    if(--time<0) finish();
-  },1000);
-}
-
-function load(){
-  bar.style.width=((i+1)/TOTAL*100)+"%";
-  q.innerText=`Câu ${i+1}: ${qs[i].q}`;
-  answers.innerHTML="";
-  qs[i].opts.forEach((o,n)=>{
-    answers.innerHTML+=`
-    <label class="option">
-      <input type="radio" name="a" value="${n}">
-      <span class="radio"></span>
-      <span>${o}</span>
-    </label>`;
-  });
-}
-
-function next(){
-  const c=document.querySelector("input[name=a]:checked");
-  if(!c) return alert("Chọn đáp án");
-  if(+c.value===qs[i].correct) score++;
-  i++; i<qs.length?load():finish();
-}
-
-function finish(){
-  clearInterval(timer);
-  quiz.style.display="none";
-  end.style.display="block";
-
-  const pass = score>=Math.ceil(TOTAL*PASS_RATE);
-
-  fetch(API,{
-    method:"POST",
-    body:JSON.stringify({
-      name:name.value,
-      code:code.value,
-      score, total:TOTAL,
-      time:TIME-time,
-      pass
-    })
-  });
-
-  result.innerHTML=`
-    👤 ${name.value}<br>
-    🆔 ${code.value}<br>
-    🎯 ${score}/${TOTAL}<br>
-    <b style="color:${pass?'green':'red'}">${pass?'PASS':'FAIL'}</b>
-  `;
-}
-</script>
+  <script src="config.js"></script>
+  <script src="quiz.js"></script>
 </body>
 </html>
