@@ -1,0 +1,44 @@
+:root{
+  --main:#0ac0ca;
+}
+body{
+  font-family:Arial;
+  background:#f4f6f8;
+}
+.header{
+  text-align:center;
+  padding:15px;
+}
+.logo{
+  height:60px;
+}
+.box{
+  max-width:420px;
+  background:#fff;
+  margin:20px auto;
+  padding:20px;
+  border-radius:10px;
+}
+input,button{
+  width:100%;
+  padding:12px;
+  margin:8px 0;
+}
+button{
+  background:var(--main);
+  color:#fff;
+  border:none;
+  border-radius:6px;
+}
+.hidden{display:none}
+.top{
+  display:flex;
+  justify-content:space-between;
+}
+label{
+  display:block;
+  padding:10px;
+  border:1px solid #ddd;
+  border-radius:6px;
+  margin:6px 0;
+}
