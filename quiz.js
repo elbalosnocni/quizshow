@@ -106,8 +106,6 @@ function tick(){
   setTimeout(tick,1000);
 }
 
-let submitted = false;
-
 function submit(){
   if (submitted) return;
   submitted = true;
