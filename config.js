@@ -1,4 +1,4 @@
-const API_URL = "PASTE_WEB_APP_URL_HERE";
+const API_URL = "https://script.google.com/macros/s/AKfycbyo2XA_MLsAzpCiWJ_lnJA0v7OhT5cEPWFIaxCtGFbU__tA7hGHPo11T2VCLpOPQFgv/exec";
 
 const QUIZ_CONFIG = {
   totalQuestions: 5,
