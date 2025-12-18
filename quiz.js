@@ -1,15 +1,20 @@
 const loginBox = document.getElementById("loginBox");
-const quizBox  = document.getElementById("quiz");
+const quizBox  = document.getElementById("quizBox");
 const msg      = document.getElementById("msg");
 const timer    = document.getElementById("timer");
 
-let data=[],i=0,score=0,startTime,answers=[];
+const empId   = document.getElementById("empId");
+const empName = document.getElementById("empName");
+const dept    = document.getElementById("dept");
+
+let data = [], i = 0, score = 0, startTime, answers = [];
+let submitted = false;
 
 function startQuiz(){
-  window.IS_ADMIN = (
-  dept === "NHÂN SỰ" ||
-  dept === "HR" ||
-  dept === "BAN GIÁM ĐỐC"
+ window.IS_ADMIN = (
+  dept.value === "NHÂN SỰ" ||
+  dept.value === "HR" ||
+  dept.value === "BAN GIÁM ĐỐC"
 );
 
   const now=new Date();
