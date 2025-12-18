@@ -1,3 +1,8 @@
+const loginBox = document.getElementById("loginBox");
+const quizBox  = document.getElementById("quiz");
+const msg      = document.getElementById("msg");
+const timer    = document.getElementById("timer");
+
 let data=[],i=0,score=0,startTime,answers=[];
 
 function startQuiz(){
@@ -75,9 +80,13 @@ function render() {
 
 function next(){
   const c = document.querySelector("input[name=ans]:checked");
-  answers.push(c ? Number(c.value) : null);
+  if (!c) {
+    alert("⚠️ Vui lòng chọn đáp án");
+    return;
+  }
 
-  if (c && Number(c.value) === data[i].correct) score++;
+  answers.push(Number(c.value));
+  if (Number(c.value) === data[i].correct) score++;
 
   i++;
   if (i < data.length) render();
@@ -92,7 +101,12 @@ function tick(){
   setTimeout(tick,1000);
 }
 
+let submitted = false;
+
 function submit(){
+  if (submitted) return;
+  submitted = true;
+
   fetch(API_URL,{
     method:"POST",
     body:JSON.stringify({
