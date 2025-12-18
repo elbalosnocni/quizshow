@@ -1,5 +1,5 @@
 const API_URL = "https://script.google.com/macros/s/AKfycbyo2XA_MLsAzpCiWJ_lnJA0v7OhT5cEPWFIaxCtGFbU__tA7hGHPo11T2VCLpOPQFgv/exec";
-
+const ENABLE_PREVIEW_ANSWER = true; // HR / Admin
 const QUIZ_CONFIG = {
   totalQuestions: 5,
   duration: 600,
