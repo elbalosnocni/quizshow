@@ -32,25 +32,22 @@ function startQuiz(){
 }
 
 function render() {
-  const q = questions[index];
+  const q = data[i];
   if (!q) return;
 
   let html = `
     <div class="q-title">
-      <b>Câu ${index + 1}/${questions.length}</b>
+      <b>Câu ${i + 1}/${data.length}</b>
     </div>
 
-    <div class="q-text">
-      ${q.q}
-    </div>
-
+    <div class="q-text">${q.q}</div>
     <div class="answers">
   `;
 
-  q.a.forEach((ans, i) => {
+  q.a.forEach((ans, idx) => {
     html += `
       <label class="ans">
-        <input type="radio" name="ans" value="${i}">
+        <input type="radio" name="ans" value="${idx}">
         <span>${ans}</span>
       </label>
     `;
@@ -58,7 +55,6 @@ function render() {
 
   html += `</div>`;
 
-  /* ===== PREVIEW ĐÁP ÁN ĐÚNG (HR / ADMIN) ===== */
   if (window.IS_ADMIN) {
     html += `
       <div style="
@@ -73,18 +69,18 @@ function render() {
     `;
   }
 
-  html += `
-    <button class="btn" onclick="next()">Tiếp</button>
-  `;
-
-  document.getElementById("quiz").innerHTML = html;
+  html += `<button class="btn" onclick="next()">Tiếp</button>`;
+  quizBox.innerHTML = html;
 }
+
 function next(){
-  const c=document.querySelector("input[name=a]:checked");
-  answers.push(c?c.value:null);
-  if(c && c.value==data[i].correct) score++;
+  const c = document.querySelector("input[name=ans]:checked");
+  answers.push(c ? Number(c.value) : null);
+
+  if (c && Number(c.value) === data[i].correct) score++;
+
   i++;
-  if(i<data.length) render();
+  if (i < data.length) render();
   else submit();
 }
 
