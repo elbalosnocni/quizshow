@@ -24,10 +24,7 @@ function startQuiz(){
   }
   fetch(API_URL,{
     method:"POST",
-    headers: {
-    "Content-Type": "application/json"
-  },
-   body:JSON.stringify({
+    body:JSON.stringify({
       action:"start",
       empId:empId.value,
       empName:empName.value,
