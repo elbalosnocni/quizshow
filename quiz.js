@@ -113,24 +113,29 @@ function submit(){
   fetch(API_URL,{
     method:"POST",
     body:JSON.stringify({
-      action:"submit",
+      action: "submit",
       empId: empId.value,
-      score,
-      total: data.length,
+      score: score,
       time: Math.floor((Date.now()-startTime)/1000),
-      answers
+      answers: answers
     })
   })
   .then(r => r.json())
   .then(res => {
+
     quizBox.innerHTML = `
       <h2>KẾT QUẢ BÀI THI</h2>
       <p>👤 ${empName.value} (${empId.value})</p>
-      <p>📊 Điểm: <b>${res.score}/${data.length}</b></p>
-      <p>📈 Tỷ lệ: ${(res.percent*100).toFixed(0)}%</p>
-      <p>🏁 Kết quả: <b style="color:${res.pass==="PASS"?"green":"red"}">${res.pass}</b></p>
-      <p>📄 Chứng nhận đã được gửi Email</p>
+      <p>📊 Điểm: <b>${res.score}/5</b></p>
+      <p>📈 Tỷ lệ: <b>${(res.percent*100).toFixed(0)}%</b></p>
+      <p>🏁 Kết quả:
+        <b style="color:${res.pass==="PASS"?"green":"red"}">
+          ${res.pass}
+        </b>
+      </p>
+      <p>📄 Chứng nhận đã gửi về email</p>
     `;
   });
 }
+
 
