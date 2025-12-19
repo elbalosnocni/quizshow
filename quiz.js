@@ -24,7 +24,10 @@ function startQuiz(){
   }
   fetch(API_URL,{
     method:"POST",
-    body:JSON.stringify({
+    headers: {
+    "Content-Type": "application/json"
+  },
+   body:JSON.stringify({
       action:"start",
       empId:empId.value,
       empName:empName.value,
@@ -126,7 +129,7 @@ function submit(){
     quizBox.innerHTML = `
       <h2>KẾT QUẢ BÀI THI</h2>
       <p>👤 ${empName.value} (${empId.value})</p>
-      <p>📊 Điểm: <b>${res.score}/5</b></p>
+      <p>📊 Điểm: <b>${res.score}/${data.length}</b></p>
       <p>📈 Tỷ lệ: <b>${(res.percent*100).toFixed(0)}%</b></p>
       <p>🏁 Kết quả:
         <b style="color:${res.pass==="PASS"?"green":"red"}">
