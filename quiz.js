@@ -114,9 +114,23 @@ function submit(){
     method:"POST",
     body:JSON.stringify({
       action:"submit",
+      empId: empId.value,
       score,
-      time:Math.floor((Date.now()-startTime)/1000),
+      total: data.length,
+      time: Math.floor((Date.now()-startTime)/1000),
       answers
     })
-  }).then(()=>alert("Đã nộp bài"));
+  })
+  .then(r => r.json())
+  .then(res => {
+    quizBox.innerHTML = `
+      <h2>KẾT QUẢ BÀI THI</h2>
+      <p>👤 ${empName.value} (${empId.value})</p>
+      <p>📊 Điểm: <b>${res.score}/${data.length}</b></p>
+      <p>📈 Tỷ lệ: ${(res.percent*100).toFixed(0)}%</p>
+      <p>🏁 Kết quả: <b style="color:${res.pass==="PASS"?"green":"red"}">${res.pass}</b></p>
+      <p>📄 Chứng nhận đã được gửi Email</p>
+    `;
+  });
 }
+
